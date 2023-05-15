@@ -1,5 +1,5 @@
-import 'package:intl/intl.dart';
 import 'package:daylight/daylight.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   const berlin = const DaylightLocation(52.518611, 13.408056);
@@ -14,18 +14,26 @@ void main() {
     Zenith.civil,
     EventType.sunrise,
   );
-  print(DateFormat("HH:mm:ss").format(civilSunrise)); // utc: 04:58:18
+  if (civilSunrise != null) {
+    print(DateFormat("HH:mm:ss").format(civilSunrise)); // utc: 04:58:18
+  }
 
   // calculate for sunrise and sunset on astronomical twilight
   final astronomicalEvents = berlinSunCalculator.calculateForDay(
     october,
     Zenith.astronomical,
   );
-  print(
-    DateFormat("HH:mm:ss").format(astronomicalEvents.sunset),
-  ); // utc: 18:03:55
-  print(
-    DateFormat("HH:mm:ss").format(astronomicalEvents.sunrise),
-  ); // utc: 03:39:09
-  print(astronomicalEvents.type); // DayType.sunriseAndSunset
+  final sunset = astronomicalEvents.sunset;
+  if (sunset != null) {
+    print(
+      DateFormat("HH:mm:ss").format(sunset),
+    ); // utc: 18:03:55
+  }
+  final sunrise = astronomicalEvents.sunrise;
+  if (sunrise != null) {
+    print(
+      DateFormat("HH:mm:ss").format(sunrise),
+    ); // utc: 03:39:09
+    print(astronomicalEvents.type); // DayType.sunriseAndSunset
+  }
 }
