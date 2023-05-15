@@ -1,9 +1,10 @@
 library daylight;
 
 import 'dart:math' as math;
+
+import 'package:angles/angles.dart';
 import 'package:daylight/src/season.dart';
 import 'package:intl/intl.dart';
-import 'package:angles/angles.dart';
 
 /// Enum that defines in with scope the zenith time will be calculated.
 enum EventType { sunrise, sunset }
@@ -213,9 +214,9 @@ double _fixValue(double value, [double min = 0, double max = 360]) {
   return value;
 }
 
-double _radToDeg(double rad) => Angle.fromRadians(rad).degrees;
+double _radToDeg(double rad) => Angle.radians(rad).degrees;
 
-double _degToRad(double deg) => Angle.fromDegrees(deg).radians;
+double _degToRad(double deg) => Angle.degrees(deg).radians;
 
 /// Simple wrapper class for storing the geographical coordinates of a specific location.
 class DaylightLocation {
