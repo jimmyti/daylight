@@ -2,7 +2,6 @@ library daylight;
 
 import 'dart:math' as math;
 import 'package:daylight/src/season.dart';
-import 'package:intl/intl.dart';
 import 'package:angles/angles.dart';
 
 /// Enum that defines in with scope the zenith time will be calculated.
@@ -98,8 +97,6 @@ class DaylightCalculator {
   final DaylightLocation location;
 
   /// Calculate both sunset and sunrise times for optional [Zenith] and returns in a [DaylightResult]
-  ///
-  /// Dates are UTC.
   DaylightResult calculateForDay(
     DateTime date, [
     Zenith zenith = Zenith.official,
@@ -111,11 +108,14 @@ class DaylightCalculator {
 
   /// Calculate the time of an specific sun event
   ///
-  /// Returns in UTC.
+  /// Returns a UTC [DateTime].
+  ///
+  /// Returns `null` if the event does not happen.
   DateTime? calculateEvent(DateTime date, Zenith zenith, EventType type) {
-    final lastMidnight = DateTime(date.year, date.month, date.day);
+    final utcDate = date.toUtc();
+    final lastMidnight = DateTime.utc(utcDate.year, utcDate.month, utcDate.day);
 
-    final eventMils = _calculate(date, zenith, type);
+    final eventMils = _calculate(utcDate, zenith, type);
     if (eventMils == null) {
       return null;
     }
@@ -153,7 +153,8 @@ class DaylightCalculator {
 
   double _longToHour(DateTime utc, int offset) {
     final double baseLongHour = location.long / 15;
-    final int dayOfYear = int.parse(DateFormat("D").format(utc));
+    final diff = utc.difference(DateTime.utc(utc.year));
+    final dayOfYear = diff.inDays;
 
     final double difference = offset - baseLongHour;
 
